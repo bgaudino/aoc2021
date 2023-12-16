@@ -1,4 +1,8 @@
 github.com/bgaudino/go-helpers v0.0.0-20230702205349-42493b2d33cc h1:jUD+YofaMP70HCpt0Z4FCoYuk9zpnN9pz6NQOLLdQjU=
 github.com/bgaudino/go-helpers v0.0.0-20230702205349-42493b2d33cc/go.mod h1:nHKiKJ4UJSNI5xD/yPaZ8buwiwvGpKX7SZvBVHYARaA=
+github.com/bgaudino/go-helpers v0.0.0-20231216034141-d2c0c372dd63 h1:BdMrisVgaT0wkrJRDisIStO/gVXa9WBk8T0rIiqDKMQ=
+github.com/bgaudino/go-helpers v0.0.0-20231216034141-d2c0c372dd63/go.mod h1:nHKiKJ4UJSNI5xD/yPaZ8buwiwvGpKX7SZvBVHYARaA=
 golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 h1:k/i9J1pBpvlfR+9QsetwPyERsqu1GIbi967PQMq3Ivc=
 golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1/go.mod h1:V1LtkGg67GoY2N1AnLN78QLrzxkLyJw7RJb1gzOOz9w=
+golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611 h1:qCEDpW1G+vcj3Y7Fy52pEM1AWm3abj8WimGYejI3SC4=
+golang.org/x/exp v0.0.0-20231214170342-aacd6d4b4611/go.mod h1:iRJReGqOEeBhDZGkGbynYwcHlctCvnjTYIamk7uXpHI=
