@@ -7,17 +7,17 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bgaudino/go-helpers"
+	"github.com/bgaudino/godino"
 )
 
-func count(f helpers.Dict[int, int]) int {
-	return helpers.Sum(f.Values()...)
+func count(f godino.Dict[int, int]) int {
+	return godino.Sum(f.Values()...)
 }
 
 func main() {
 	file, _ := os.Open("../data/day06.txt")
 	scanner := bufio.NewScanner(file)
-	fish := make(helpers.Dict[int, int])
+	fish := make(godino.Dict[int, int])
 	for scanner.Scan() {
 		text := scanner.Text()
 		for _, s := range strings.Split(text, ",") {

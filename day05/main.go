@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bgaudino/go-helpers"
+	"github.com/bgaudino/godino"
 )
 
 type point struct {
@@ -45,8 +45,8 @@ func (p1 point) line(p2 point, diagonals bool) []point {
 }
 
 func main() {
-	part1 := helpers.NewCounter([]point{})
-	part2 := helpers.NewCounter([]point{})
+	part1 := godino.NewCounter([]point{})
+	part2 := godino.NewCounter([]point{})
 
 	file, _ := os.Open("../data/day05.txt")
 	scanner := bufio.NewScanner(file)
@@ -62,7 +62,7 @@ func main() {
 		part1.Update(points[0].line(points[1], false))
 		part2.Update(points[0].line(points[1], true))
 	}
-	for i, part := range []helpers.Counter[point]{part1, part2} {
+	for i, part := range []godino.Counter[point]{part1, part2} {
 		count := 0
 		for _, point := range part.MostCommon(-1) {
 			if point.Count >= 2 {

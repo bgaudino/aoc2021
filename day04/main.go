@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/bgaudino/go-helpers"
+	"github.com/bgaudino/godino"
 )
 
 type square struct {
@@ -17,7 +17,7 @@ type square struct {
 
 type bingoCard struct {
 	numbers map[int]square
-	matches helpers.Set[square]
+	matches godino.Set[square]
 }
 
 func (b bingoCard) mark(n int) {
@@ -29,7 +29,7 @@ func (b bingoCard) mark(n int) {
 
 func (b *bingoCard) isWinner(ways [][]square) bool {
 	for _, way := range ways {
-		if helpers.Every(way, func(s square) bool { return b.matches.Has(s) }) {
+		if godino.Every(way, func(s square) bool { return b.matches.Has(s) }) {
 			return true
 		}
 	}
@@ -72,7 +72,7 @@ func main() {
 			}
 		}
 		if len(card) == 5 {
-			b := bingoCard{make(map[int]square), helpers.NewSet[square]()}
+			b := bingoCard{make(map[int]square), godino.NewSet[square]()}
 			for y, r := range card {
 				for x, n := range r {
 					b.numbers[n] = square{x, y}
@@ -101,7 +101,7 @@ func main() {
 	}
 
 	scores := []int{}
-	winners := helpers.NewSet[int]()
+	winners := godino.NewSet[int]()
 	for _, n := range numbers {
 		for j, c := range cards {
 			if winners.Has(j) {

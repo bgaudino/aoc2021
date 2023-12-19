@@ -6,11 +6,11 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/bgaudino/go-helpers"
+	"github.com/bgaudino/godino"
 )
 
 func mostAndLeastCommon(report []string, position int) (byte, byte) {
-	c := helpers.NewCounter([]byte{})
+	c := godino.NewCounter([]byte{})
 	for _, number := range report {
 		c.Add(number[position])
 	}
@@ -44,7 +44,7 @@ func main() {
 	for len(oxygenReport) > 1 {
 		j := i % l
 		most, _ := mostAndLeastCommon(oxygenReport, j)
-		oxygenReport = helpers.Filter(oxygenReport, func(n string) bool { return n[j] == most })
+		oxygenReport = godino.Filter(oxygenReport, func(n string) bool { return n[j] == most })
 		i++
 	}
 
@@ -53,7 +53,7 @@ func main() {
 	for len(co2report) > 1 {
 		j := i % l
 		_, least := mostAndLeastCommon(co2report, j)
-		co2report = helpers.Filter(co2report, func(n string) bool { return n[j] == least })
+		co2report = godino.Filter(co2report, func(n string) bool { return n[j] == least })
 		i++
 	}
 

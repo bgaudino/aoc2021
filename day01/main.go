@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/bgaudino/go-helpers"
+	"github.com/bgaudino/godino"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		if len(windowB) == 4 {
 			windowB = windowB[1:]
 		}
-		if i > 2 && helpers.Sum(windowA...) > helpers.Sum(windowB...) {
+		if i > 2 && godino.Sum(windowA...) > godino.Sum(windowB...) {
 			windowIncreases++
 		}
 		depth = newDepth
