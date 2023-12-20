@@ -4,10 +4,16 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 
 	"github.com/bgaudino/godino"
 )
+
+type coord struct {
+	x int
+	y int
+}
 
 func main() {
 	file, _ := os.Open("../data/day09.txt")
@@ -23,28 +29,15 @@ func main() {
 	}
 
 	riskLevels := 0
-
-	maxX := len(heightMap[0])
-	maxY := len(heightMap)
-	neighbors := func(x int, y int) [][]int {
-		return godino.Filter(
-			[][]int{
-				{x - 1, y - 1}, {x, y - 1}, {x + 1, y - 1},
-				{x - 1, y}, {x + 1, y},
-				{x - 1, y + 1}, {x, y + 1}, {x + 1, y + 1},
-			},
-			func(coord []int) bool {
-				x, y := coord[0], coord[1]
-				return x >= 0 && x < maxX && y >= 0 && y < maxY
-			},
-		)
-	}
-
+	basins := []godino.Set[coord]{}
+	seen := godino.NewSet[coord]()
+	h, w := len(heightMap), len(heightMap[0])
 	for y, row := range heightMap {
 		for x, height := range row {
 			isLow := true
-			for _, n := range neighbors(x, y) {
-				if height >= heightMap[n[1]][n[0]] {
+			c := coord{x, y}
+			for _, n := range getNeighbors(c, h, w) {
+				if height >= heightMap[n.y][n.x] {
 					isLow = false
 					break
 				}
@@ -52,7 +45,48 @@ func main() {
 			if isLow {
 				riskLevels += height + 1
 			}
+			if height != 9 && !seen.Has(c) {
+				basin := findBasin(c, heightMap)
+				basins = append(basins, basin)
+				seen.Update(basin)
+			}
 		}
 	}
 	fmt.Printf("Part 1: %v\n", riskLevels)
+
+	sort.Slice(basins, func(i, j int) bool {
+		return len(basins[i]) > len(basins[j])
+	})
+	part2 := godino.Prod(godino.Map(basins[:3], func(b godino.Set[coord]) int { return len(b) })...)
+	fmt.Printf("Part 2: %v\n", part2)
+}
+
+func getNeighbors(c coord, h int, w int) []coord {
+	return godino.Filter(
+		[]coord{
+			{c.x, c.y - 1},
+			{c.x - 1, c.y}, {c.x + 1, c.y},
+			{c.x, c.y + 1},
+		},
+		func(c coord) bool {
+			return c.x >= 0 && c.x < w && c.y >= 0 && c.y < h
+		},
+	)
+}
+
+func findBasin(c coord, m [][]int) godino.Set[coord] {
+	b := godino.NewSet[coord]()
+	h, w := len(m), len(m[0])
+	q := godino.NewDeque[coord]()
+	q.PushRight(c)
+	for q.Len() > 0 {
+		location := q.PopLeft()
+		b.Add(location)
+		for _, n := range getNeighbors(location, h, w) {
+			if m[n.y][n.x] != 9 && !b.Has(n) {
+				q.PushRight(n)
+			}
+		}
+	}
+	return b
 }
