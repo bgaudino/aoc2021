@@ -34,31 +34,6 @@ func (p *probe) move() {
 	p.velocity.y--
 }
 
-func (p probe) print() {
-	xx := godino.Map(p.visited.Members(), func(c coord) int { return c.x })
-	xx = append(xx, []int{X, XX}...)
-	yy := godino.Map(p.visited.Members(), func(c coord) int { return c.y })
-	yy = append(xx, []int{Y, YY}...)
-	minX, _ := godino.Min(xx...)
-	maxX, _ := godino.Max(xx...)
-	minY, _ := godino.Min(yy...)
-	maxY, _ := godino.Max(yy...)
-	for y := minY; y <= maxY; y++ {
-		for x := minX; x <= maxX; x++ {
-			c := coord{x, y}
-			if p.visited.Has(c) {
-				fmt.Print("#")
-			} else if inTargetArea(c) {
-				fmt.Print("T")
-			} else {
-				fmt.Print(".")
-			}
-		}
-		fmt.Print("\n")
-	}
-	fmt.Print("\n")
-}
-
 func (p probe) fire() (bool, int) {
 	for {
 		p.move()
