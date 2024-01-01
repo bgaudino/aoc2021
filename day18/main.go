@@ -143,40 +143,49 @@ func (p *pair) regularNumbers(print bool) []regularNumber {
 func main() {
 	file, _ := os.Open("../data/day18.txt")
 	scanner := bufio.NewScanner(file)
-	var n *pair
+	var p *pair
+	es := []elementSlice{}
 	for scanner.Scan() {
 		data := []byte(scanner.Text())
-		var p elementSlice
-		json.Unmarshal(data, &p)
-		if n == nil {
-			n = getNumber(p)
+		var s elementSlice
+		json.Unmarshal(data, &s)
+		es = append(es, s)
+		if p == nil {
+			p = getPair(s)
 		} else {
-			n = add(n, getNumber(p))
-			n.reduce()
+			p = add(p, getPair(s))
+			p.reduce()
 		}
 	}
-	fmt.Printf("Part 1: %v\n", n.magnitude())
+	fmt.Printf("Part 1: %v\n", p.magnitude())
+	maxMagnitude := 0
+	for c := range godino.Permutations(es, 2) {
+		p := add(getPair(c[0]), getPair(c[1]))
+		p.reduce()
+		maxMagnitude, _ = godino.Max(maxMagnitude, p.magnitude())
+	}
+	fmt.Printf("Part 2: %v\n", maxMagnitude)
 }
 
-func getNumber(p elementSlice) *pair {
-	x, _ := p[0].(float64)
-	y, _ := p[1].(float64)
-	n := pair{int(x), int(y), false, false, nil, nil, nil}
-	xx, xnum := p[0].(elementSlice)
-	yy, ynum := p[1].(elementSlice)
+func getPair(s elementSlice) *pair {
+	x, _ := s[0].(float64)
+	y, _ := s[1].(float64)
+	p := pair{int(x), int(y), false, false, nil, nil, nil}
+	xx, xnum := s[0].(elementSlice)
+	yy, ynum := s[1].(elementSlice)
 	if xnum {
-		xxx := getNumber(xx)
-		xxx.parent = &n
+		xxx := getPair(xx)
+		xxx.parent = &p
 		xxx.isX = true
-		n.xx = xxx
+		p.xx = xxx
 	}
 	if ynum {
-		yyy := getNumber(yy)
-		yyy.parent = &n
+		yyy := getPair(yy)
+		yyy.parent = &p
 		yyy.isY = true
-		n.yy = yyy
+		p.yy = yyy
 	}
-	return &n
+	return &p
 }
 
 type state struct {
