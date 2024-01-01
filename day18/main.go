@@ -20,7 +20,7 @@ type pair struct {
 }
 
 type regularNumber struct {
-	n   *pair
+	p   *pair
 	pos string
 }
 
@@ -84,9 +84,9 @@ func (p *pair) next() *pair {
 	found := false
 	for _, num := range h.regularNumbers(false) {
 		if found {
-			return num.n
+			return num.p
 		}
-		if num.n == p && num.pos == "y" {
+		if num.p == p && num.pos == "y" {
 			found = true
 		}
 	}
@@ -97,10 +97,10 @@ func (p *pair) prev() *pair {
 	h := p.head()
 	var prev *pair
 	for _, num := range h.regularNumbers(false) {
-		if num.n == p {
+		if num.p == p {
 			return prev
 		}
-		prev = num.n
+		prev = num.p
 	}
 	return nil
 }
@@ -112,7 +112,7 @@ func (p *pair) reduce() {
 			e.explode()
 		} else {
 			s := shouldSplit(p)
-			if s.n != nil {
+			if s.p != nil {
 				split(s)
 			} else {
 				break
@@ -136,9 +136,9 @@ func (p *pair) regularNumbers(print bool) []regularNumber {
 	if print {
 		for _, num := range nums {
 			if num.pos == "x" {
-				fmt.Print(num.n.x)
+				fmt.Print(num.p.x)
 			} else if num.pos == "y" {
-				fmt.Print(num.n.y)
+				fmt.Print(num.p.y)
 			}
 		}
 		fmt.Println()
@@ -219,9 +219,9 @@ func shouldSplit(n *pair) regularNumber {
 	for _, num := range n.regularNumbers(false) {
 		var v int
 		if num.pos == "x" {
-			v = num.n.x
+			v = num.p.x
 		} else if num.pos == "y" {
-			v = num.n.y
+			v = num.p.y
 		}
 		if v >= 10 {
 			return num
@@ -232,17 +232,17 @@ func shouldSplit(n *pair) regularNumber {
 
 func split(n regularNumber) {
 	if n.pos == "x" {
-		v := n.n.x
+		v := n.p.x
 		x := v / 2
 		y := v - x
-		n.n.x = 0
-		n.n.xx = &pair{x, y, nil, nil, n.n}
+		n.p.x = 0
+		n.p.xx = &pair{x, y, nil, nil, n.p}
 	} else if n.pos == "y" {
-		v := n.n.y
+		v := n.p.y
 		x := v / 2
 		y := v - x
-		n.n.y = 0
-		n.n.yy = &pair{x, y, nil, nil, n.n}
+		n.p.y = 0
+		n.p.yy = &pair{x, y, nil, nil, n.p}
 	}
 }
 
