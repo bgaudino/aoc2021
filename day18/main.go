@@ -14,8 +14,6 @@ type elementSlice = []interface{}
 type pair struct {
 	x      int
 	y      int
-	isX    bool
-	isY    bool
 	xx     *pair
 	yy     *pair
 	parent *pair
@@ -43,9 +41,9 @@ func (p *pair) explode() {
 			next.y += p.y
 		}
 	}
-	if p.isX {
+	if p.isX() {
 		p.parent.xx = nil
-	} else if p.isY {
+	} else if p.isY() {
 		p.parent.yy = nil
 	}
 }
@@ -55,6 +53,14 @@ func (p *pair) head() *pair {
 		p = p.parent
 	}
 	return p
+}
+
+func (p *pair) isX() bool {
+	return p.parent != nil && p.parent.xx == p
+}
+
+func (p *pair) isY() bool {
+	return p.parent != nil && p.parent.yy == p
 }
 
 func (p *pair) magnitude() int {
@@ -170,19 +176,17 @@ func main() {
 func getPair(s elementSlice) *pair {
 	x, _ := s[0].(float64)
 	y, _ := s[1].(float64)
-	p := pair{int(x), int(y), false, false, nil, nil, nil}
+	p := pair{int(x), int(y), nil, nil, nil}
 	xx, xnum := s[0].(elementSlice)
 	yy, ynum := s[1].(elementSlice)
 	if xnum {
 		xxx := getPair(xx)
 		xxx.parent = &p
-		xxx.isX = true
 		p.xx = xxx
 	}
 	if ynum {
 		yyy := getPair(yy)
 		yyy.parent = &p
-		yyy.isY = true
 		p.yy = yyy
 	}
 	return &p
@@ -232,20 +236,18 @@ func split(n regularNumber) {
 		x := v / 2
 		y := v - x
 		n.n.x = 0
-		n.n.xx = &pair{x, y, true, false, nil, nil, n.n}
+		n.n.xx = &pair{x, y, nil, nil, n.n}
 	} else if n.pos == "y" {
 		v := n.n.y
 		x := v / 2
 		y := v - x
 		n.n.y = 0
-		n.n.yy = &pair{x, y, false, true, nil, nil, n.n}
+		n.n.yy = &pair{x, y, nil, nil, n.n}
 	}
 }
 
 func add(n1 *pair, n2 *pair) *pair {
-	n1.isX = true
-	n2.isY = true
-	n3 := &pair{0, 0, false, false, n1, n2, nil}
+	n3 := &pair{0, 0, n1, n2, nil}
 	n1.parent = n3
 	n2.parent = n3
 	return n3
