@@ -82,7 +82,7 @@ func (p *pair) magnitude() int {
 func (p *pair) next() *pair {
 	h := p.head()
 	found := false
-	for _, num := range h.regularNumbers(false) {
+	for _, num := range h.regularNumbers() {
 		if found {
 			return num.p
 		}
@@ -96,7 +96,7 @@ func (p *pair) next() *pair {
 func (p *pair) prev() *pair {
 	h := p.head()
 	var prev *pair
-	for _, num := range h.regularNumbers(false) {
+	for _, num := range h.regularNumbers() {
 		if num.p == p {
 			return prev
 		}
@@ -121,27 +121,17 @@ func (p *pair) reduce() {
 	}
 }
 
-func (p *pair) regularNumbers(print bool) []regularNumber {
+func (p *pair) regularNumbers() []regularNumber {
 	nums := []regularNumber{}
 	if p.xx == nil {
 		nums = append(nums, regularNumber{p, "x"})
 	} else {
-		nums = append(nums, p.xx.regularNumbers(false)...)
+		nums = append(nums, p.xx.regularNumbers()...)
 	}
 	if p.yy == nil {
 		nums = append(nums, regularNumber{p, "y"})
 	} else {
-		nums = append(nums, p.yy.regularNumbers(false)...)
-	}
-	if print {
-		for _, num := range nums {
-			if num.pos == "x" {
-				fmt.Print(num.p.x)
-			} else if num.pos == "y" {
-				fmt.Print(num.p.y)
-			}
-		}
-		fmt.Println()
+		nums = append(nums, p.yy.regularNumbers()...)
 	}
 	return nums
 }
@@ -216,7 +206,7 @@ func shouldExplode(n *pair) *pair {
 }
 
 func shouldSplit(n *pair) regularNumber {
-	for _, num := range n.regularNumbers(false) {
+	for _, num := range n.regularNumbers() {
 		var v int
 		if num.pos == "x" {
 			v = num.p.x
